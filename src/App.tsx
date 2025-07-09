@@ -53,6 +53,17 @@ function App() {
 
   const handleEmailClick = (email: AnalyzedEmail) => {
     setSelectedEmail(email)
+    markEmailAsRead(email.message_id)
+  }
+
+  const markEmailAsRead = (messageId: string) => {
+    setAnalyzedEmails(prevEmails => 
+      prevEmails.map(email => 
+        email.message_id === messageId 
+          ? { ...email, status: 'read' as const }
+          : email
+      )
+    )
   }
 
   const handleBackToInbox = () => {
@@ -101,6 +112,7 @@ interface EmailListProps {
 function EmailList({ emails, onEmailClick, isAnalyzing, onAnalyzeRecent }: EmailListProps) {
   const criticalEmails = emails.filter(email => email.isCritical === true)
   const nonCriticalEmails = emails.filter(email => email.isCritical === false)
+  const unreadCount = emails.filter(email => email.status === 'unread').length
 
   if (isAnalyzing) {
     return (
@@ -117,7 +129,7 @@ function EmailList({ emails, onEmailClick, isAnalyzing, onAnalyzeRecent }: Email
   return (
     <div className="email-list">
       <div className="inbox-header">
-        <h2>Inbox ({emails.length})</h2>
+        <h2>Inbox ({emails.length}) {unreadCount > 0 && <span className="unread-count">• {unreadCount} unread</span>}</h2>
         <button 
           className="analyze-button"
           onClick={onAnalyzeRecent}
