@@ -1,4 +1,4 @@
-# Vooma Email Inbox
+# AI Email Inbox
 
 A React TypeScript application for managing and analyzing emails with AI-powered criticality detection.
 
